@@ -959,20 +959,61 @@ function syncChipsToSelect() {
 }
 
 /* =========================
+/* =========================
    INPUT VALIDATION RULES
 ========================= */
 
-// NAME → UPPERCASE ONLY
+// 1. NAME → UPPERCASE ONLY
 nameInput.addEventListener('input', e => {
   e.target.value = e.target.value.toUpperCase();
 });
 
-// DIGIT ONLY
-[mykadInput, phoneInput].forEach(el => {
-  el.addEventListener('input', e => {
-    e.target.value = e.target.value.replace(/\D/g, '');
-  });
+// 2. MYKAD → Exactly 12 Digits Only
+mykadInput.addEventListener('input', e => {
+  // Enforce digits only and cap it at 12 digits max
+  e.target.value = e.target.value.replace(/\D/g, '').slice(0, 12);
 });
+
+mykadInput.addEventListener('blur', e => {
+  const value = e.target.value;
+  
+  if (value.length === 12) {
+    // Return as a text string with a '+' prefix
+    const mykadResult = '+' + value; 
+    console.log("MyKad Output (Text):", mykadResult);
+    // standard output example: "+990101145151"
+  } else {
+    console.warn("Invalid MyKad: Must be exactly 12 digits.");
+  }
+});
+
+// 3. PHONE → Starts with 1 followed by 8 or 9 digits
+phoneInput.addEventListener('input', e => {
+  let value = e.target.value.replace(/\D/g, '');
+  
+  // Enforce that it must start with 1
+  if (value.length > 0 && !value.startsWith('1')) {
+    value = ''; 
+  }
+  
+  // Cap length at 10 digits total (1 + 9 digits max)
+  e.target.value = value.slice(0, 10);
+});
+
+phoneInput.addEventListener('blur', e => {
+  const value = e.target.value;
+  
+  // Validates if length is either 9 digits (1+8) or 10 digits (1+9)
+  if (value.startsWith('1') && (value.length === 9 || value.length === 10)) {
+    // Prepend '60' and convert the final string into a Number type
+    const phoneResult = Number('60' + value);
+    console.log("Phone Output (Number):", phoneResult);
+    // standard output example: 60123456789
+  } else {
+    console.warn("Invalid Phone: Must be 1 followed by 8 or 9 digits.");
+  }
+});
+
 
 /* =========================
    STEP NAVIGATION
