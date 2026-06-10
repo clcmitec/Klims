@@ -887,164 +887,215 @@
   <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxkPQh4whskPuB6jK_4_ylzM5OKN6lGaIGhj04DZA0rTET_Zc3hk36ikgLSQwBfP7lL-A/exec";
 
-    const heroStage = document.getElementById('heroStage');
-    const applicationStage = document.getElementById('applicationStage');
-    const heroAgreementCheck = document.getElementById('heroAgreementCheck');
-    const btnHeroAdvance = document.getElementById('btnHeroAdvance');
+const heroStage = document.getElementById('heroStage');
+const applicationStage = document.getElementById('applicationStage');
+const heroAgreementCheck = document.getElementById('heroAgreementCheck');
+const btnHeroAdvance = document.getElementById('btnHeroAdvance');
 
-    const steps = document.querySelectorAll('.form-step');
-    const nodes = document.querySelectorAll('.step-indicator');
-    const form = document.getElementById('klimsForm');
-    
-    const nameInput = document.getElementsByName('name')[0];
-    const mykadInput = document.getElementsByName('mykad')[0];
-    const phoneInput = document.getElementsByName('phone')[0];
-    const hiddenSelect = document.getElementsByName('date_of_choice')[0];
+const steps = document.querySelectorAll('.form-step');
+const nodes = document.querySelectorAll('.step-indicator');
+const form = document.getElementById('klimsForm');
 
-    let chosenDatesCache = [];
+const nameInput = document.getElementsByName('name')[0];
+const mykadInput = document.getElementsByName('mykad')[0];
+const phoneInput = document.getElementsByName('phone')[0];
+const hiddenSelect = document.getElementsByName('date_of_choice')[0];
 
-    // --- GRID CHIP GENERATION CONTROLLER ---
-    const chipsContainer = document.getElementById('chipsContainer');
-    for (let day = 11; day <= 21; day++) {
-      const chip = document.createElement('div');
-      chip.className = 'date-chip';
-      chip.setAttribute('data-value', `${day} June`);
-      chip.innerHTML = `${day} Jun <span class="month-tag">2026</span>`;
-      
-      chip.addEventListener('click', function() {
-        const val = this.getAttribute('data-value');
-        this.classList.toggle('active');
-        
-        if (this.classList.contains('active')) {
-          if (!chosenDatesCache.includes(val)) chosenDatesCache.push(val);
-        } else {
-          chosenDatesCache = chosenDatesCache.filter(item => item !== val);
-        }
-        syncChipsToSelect();
-      });
-      chipsContainer.appendChild(chip);
-    }
+let chosenDatesCache = [];
 
-    function syncChipsToSelect() {
-      hiddenSelect.innerHTML = '';
-      chosenDatesCache.forEach(dateStr => {
-        const opt = document.createElement('option');
-        opt.value = dateStr;
-        opt.selected = true;
-        hiddenSelect.appendChild(opt);
-      });
-    }
+/* =========================
+   DATE CHIP GENERATOR
+========================= */
+const chipsContainer = document.getElementById('chipsContainer');
 
-    nameInput.addEventListener('input', function(e) {
-      e.target.value = e.target.value.toUpperCase();
-    });
+if (chipsContainer) {
+  for (let day = 11; day <= 21; day++) {
+    const chip = document.createElement('div');
+    chip.className = 'date-chip';
+    chip.dataset.value = `${day} June`;
 
-    [mykadInput, phoneInput].forEach(field => {
-      field.addEventListener('input', function(e) {
-        e.target.value = e.target.value.replace(/[^\d]/g, '');
-      });
-    });
+    chip.innerHTML = `${day} Jun <span class="month-tag">2026</span>`;
 
-    function jumpToStep(idx) {
-      steps.forEach((step, i) => {
-        step.classList.toggle('active', i === idx);
-        nodes[i].classList.toggle('active', i <= idx);
-      });
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    chip.addEventListener('click', () => {
+      const val = chip.dataset.value;
+      chip.classList.toggle('active');
 
-    btnHeroAdvance.addEventListener('click', () => {
-      if (!heroAgreementCheck.checked) {
-        alert("Please acknowledge and toggle the pre-registration statements authorization to clear entry.");
-        return;
-      }
-      heroStage.style.display = 'none';
-      applicationStage.style.display = 'block';
-      jumpToStep(0);
-    });
-
-    document.getElementById('btnToStep2').addEventListener('click', () => jumpToStep(1));
-    
-    document.getElementById('btnToStep3').addEventListener('click', () => {
-      if (!nameInput.checkValidity() || !mykadInput.checkValidity() || !phoneInput.checkValidity() || chosenDatesCache.length === 0) {
-        alert("Please ensure all fields are properly configured and at least one availability chip is activated.");
-        return;
+      if (chip.classList.contains('active')) {
+        if (!chosenDatesCache.includes(val)) chosenDatesCache.push(val);
+      } else {
+        chosenDatesCache = chosenDatesCache.filter(x => x !== val);
       }
 
-      let rawDigits = phoneInput.value.trim();
-      if (rawDigits.startsWith('60')) rawDigits = rawDigits.slice(2);
-      else if (rawDigits.startsWith('0')) rawDigits = rawDigits.slice(1);
-      
-      document.getElementById('sumName').textContent = nameInput.value.trim();
-      document.getElementById('sumMykad').textContent = mykadInput.value.trim();
-      document.getElementById('sumPhone').textContent = `+60 ${rawDigits}`;
-      document.getElementById('sumDates').textContent = chosenDatesCache.join(', ');
-
-      jumpToStep(2);
+      syncChipsToSelect();
     });
 
-    document.getElementById('backToStep1').addEventListener('click', () => jumpToStep(0));
-    document.getElementById('backToStep2').addEventListener('click', () => jumpToStep(1));
+    chipsContainer.appendChild(chip);
+  }
+}
 
-    // Main Webhook Data Post Transmission
-    form.addEventListener('submit', async function(e) {
-      e.preventDefault();
-      
-      const submitBtn = document.getElementById('submitBtn');
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Broadcasting Manifest...";
+/* =========================
+   SYNC FUNCTION
+========================= */
+function syncChipsToSelect() {
+  if (!hiddenSelect) return;
 
-      try {
-        let phoneClean = phoneInput.value.trim();
-        if (phoneClean.startsWith('60')) phoneClean = phoneClean.slice(2);
-        else if (phoneClean.startsWith('0')) phoneClean = phoneClean.slice(1);
-        const unifiedPhonePayload = '60' + phoneClean;
+  hiddenSelect.innerHTML = "";
 
-        const packetPayload = {
-          name: nameInput.value.trim(),
-          mykad: mykadInput.value.trim(),
-          camera_base64: "", // Intentionally sent empty to prevent backend map breakage
-          camera_filename: "",
-          phone: unifiedPhonePayload,
-          date_of_choice: chosenDatesCache.join(', ')
-        };
+  chosenDatesCache.forEach(dateStr => {
+    const opt = document.createElement('option');
+    opt.value = dateStr;
+    opt.selected = true;
+    hiddenSelect.appendChild(opt);
+  });
+}
 
-        // Bypassing CORS blocks with plain text payload strings
-        await fetch(WEB_APP_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'text/plain' },
-          body: JSON.stringify(packetPayload)
-        });
+/* =========================
+   INPUT VALIDATION RULES
+========================= */
 
-        const randomRefId = `KLIMS-2026-${Math.floor(10000 + Math.random() * 90000)}`;
-        document.querySelector('.step-bar').style.display = 'none';
+// NAME → uppercase + letters only
+nameInput.addEventListener('input', e => {
+  e.target.value = e.target.value
+    .toUpperCase()
+    .replace(/[^A-Z\s]/g, "");
+});
 
-        // --- FINAL STAGE 4: PRODUCTION SUCCESS VIEW ---
-        document.querySelector('.form-content').innerHTML = `
-          <div class="celebration-view">
-            <div class="celebration-banner-burst">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            </div>
-            <h2>Application Received</h2>
-            <p>Thank you for registering for the KLIMS 2026 Crew Recruitment. Your profile has cleared the pit stop and is locked in.</p>
-            
-            <div class="reference-plate">
-              <div class="plate-title">Manifest Reference ID</div>
-              <div class="plate-code">${randomRefId}</div>
-            </div>
-            
-            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 0;">Our operations team will reach out directly to your comms phone channel if your clearance parameters match track profiles.</p>
-          </div>
-        `;
+// MYKAD → 12 digits only
+mykadInput.addEventListener('input', e => {
+  e.target.value = e.target.value
+    .replace(/\D/g, "")
+    .slice(0, 12);
+});
 
-      } catch (error) {
-        console.error("Critical transmission error logged:", error);
-        alert("Network interface connection failure timeout. Please resubmit payload.");
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Transmit Manifest";
-      }
+// PHONE → digits only
+phoneInput.addEventListener('input', e => {
+  e.target.value = e.target.value.replace(/\D/g, "");
+});
+
+/* =========================
+   STEP NAVIGATION
+========================= */
+function jumpToStep(idx) {
+  steps.forEach((step, i) => {
+    step.classList.toggle('active', i === idx);
+    nodes[i].classList.toggle('active', i <= idx);
+  });
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/* =========================
+   HERO ENTRY
+========================= */
+btnHeroAdvance.addEventListener('click', () => {
+  if (!heroAgreementCheck.checked) {
+    alert("Please confirm agreement before proceeding.");
+    return;
+  }
+
+  heroStage.style.display = "none";
+  applicationStage.style.display = "block";
+  jumpToStep(0);
+});
+
+/* =========================
+   STEP BUTTONS
+========================= */
+document.getElementById('btnToStep2').addEventListener('click', () => {
+  jumpToStep(1);
+});
+
+document.getElementById('btnToStep3').addEventListener('click', () => {
+
+  if (
+    !nameInput.value.trim() ||
+    !mykadInput.value.trim() ||
+    !phoneInput.value.trim() ||
+    chosenDatesCache.length === 0
+  ) {
+    alert("Complete all fields before proceeding.");
+    return;
+  }
+
+  const rawPhone = phoneInput.value.trim();
+  const cleanPhone =
+    rawPhone.startsWith('60') ? rawPhone.slice(2) :
+    rawPhone.startsWith('0') ? rawPhone.slice(1) :
+    rawPhone;
+
+  document.getElementById('sumName').textContent = nameInput.value.trim();
+  document.getElementById('sumMykad').textContent = mykadInput.value.trim();
+  document.getElementById('sumPhone').textContent = "+60 " + cleanPhone;
+  document.getElementById('sumDates').textContent = chosenDatesCache.join(', ');
+
+  syncChipsToSelect();
+  jumpToStep(2);
+});
+
+document.getElementById('backToStep1').addEventListener('click', () => jumpToStep(0));
+document.getElementById('backToStep2').addEventListener('click', () => jumpToStep(1));
+
+/* =========================
+   SUBMIT HANDLER
+========================= */
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Submitting...";
+
+  try {
+
+    const phoneRaw = phoneInput.value.trim();
+    const finalPhone =
+      phoneRaw.startsWith('60') ? phoneRaw :
+      phoneRaw.startsWith('0') ? "60" + phoneRaw.slice(1) :
+      "60" + phoneRaw;
+
+    const payload = {
+      name: nameInput.value.trim(),
+      mykad: mykadInput.value.trim(),
+      phone: finalPhone,
+      date_of_choice: chosenDatesCache.join(', ')
+    };
+
+    await fetch(WEB_APP_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify(payload)
     });
+
+    const refId = "KLIMS-2026-" + Math.floor(10000 + Math.random() * 90000);
+
+    document.querySelector('.step-bar').style.display = "none";
+
+    document.querySelector('.form-content').innerHTML = `
+      <div class="celebration-view">
+        <div class="celebration-banner-burst">✓</div>
+        <h2>Application Received</h2>
+        <p>KLIMS 2026 Crew Registration Successful.</p>
+
+        <div class="reference-plate">
+          <div class="plate-title">Reference ID</div>
+          <div class="plate-code">${refId}</div>
+        </div>
+
+        <p style="font-size:13px;color:#64748b;">
+          You will be contacted if shortlisted.
+        </p>
+      </div>
+    `;
+
+  } catch (err) {
+    console.error(err);
+    alert("Submission failed. Try again.");
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Submit";
+  }
+});
   </script>
 </body>
 </html>
