@@ -6,21 +6,22 @@
   <title>KLIMS 2026 — Crew Recruitment Portal</title>
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Trebuchet+Ms:wght@400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap');
 
     :root {
-      /* Brand Tokens Extracted from 1000102560.png */
-      --mh-navy: #0c2340;
-      --mh-blue-tint: #edf4fc;
-      --mh-outline: #dae3ef;
+      /* Brand Tokens Refined from the Enrich System in 1000102685.png */
+      --mh-navy: #002f6c;                 /* Premium Airline Corporate Deep Blue */
+      --mh-blue-tint: #f4f8fc;            /* Soft Light Blue Secondary Accent Container Background */
+      --mh-outline: #d3e1f1;             /* Clean, Minimalist Slate Outlines */
       --mh-white: #ffffff;
       
-      /* Auxiliary Scheme System */
-      --text-dark: #0c2340;
-      --text-muted: #536780;
-      --mh-crimson: #d11242;
-      --success-green: #128c46;
-      --bg-global: #f7fafc;
+      /* Auxiliary UI Color System */
+      --mh-accent-cyan: #0094d2;          /* Vibrant Enrich Sky Blue/Cyan Point Highlighter */
+      --text-dark: #1e293b;               /* High-Contrast Charcoal Body Text */
+      --text-muted: #64748b;              /* Clean Slate Label Text */
+      --mh-crimson: #df1944;              /* System Warning / Urgent Error Pink-Crimson */
+      --success-green: #0f8343;           /* Success Action Fill */
+      --bg-global: #f8fafc;               /* Modern Soft Gray Screen Canvas */
       
       /* Typography & Boundary Rules */
       --font-stack: 'Open Sans', system-ui, -apple-system, sans-serif;
@@ -44,98 +45,98 @@
       padding-bottom: 60px;
     }
 
-    /* --- STEP 1: HERO VIEW LAYOUT --- */
+    /* --- STAGE 1: FRONT PAGE WHITE CANVAS HERO SYSTEM --- */
     .hero-container {
       position: relative;
       min-height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 40px 16px;
-      background: #040d1a;
-      overflow: hidden;
+      justify-content: flex-start;
+      padding: 0 16px 40px;
+      background-color: var(--mh-white); /* Pure White Background as requested */
     }
 
-    .hero-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
+    .hero-header-bar {
       width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.4;
-    }
-
-    .hero-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(180deg, rgba(12, 35, 64, 0.3) 0%, rgba(4, 13, 26, 0.95) 100%);
-      z-index: 1;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
       max-width: 580px;
-      width: 100%;
-      text-align: center;
-      color: var(--mh-white);
-      animation: slideUpFade 0.5s ease-out;
-    }
-
-    .brand-logo-panel {
-      height: 42px;
-      object-fit: contain;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--mh-outline);
+      display: flex;
+      justify-content: center;
       margin-bottom: 32px;
     }
 
+    .brand-logo-panel {
+      height: 38px;
+      object-fit: contain;
+    }
+
+    .hero-content {
+      max-width: 540px;
+      width: 100%;
+      text-align: center;
+      animation: slideUpFade 0.5s ease-out;
+    }
+
     .hero-content h1 {
-      font-size: 38px;
-      font-weight: 700;
+      font-size: 34px;
+      font-weight: 800;
       letter-spacing: -0.5px;
       line-height: 1.2;
-      margin-bottom: 6px;
-      color: var(--mh-white);
+      margin-bottom: 4px;
+      color: var(--mh-navy); /* Dark Blue text on white background */
     }
 
     .hero-content .subtitle {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 700;
-      color: var(--mh-white);
-      letter-spacing: 3px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
       text-transform: uppercase;
-      margin-bottom: 24px;
-      opacity: 0.9;
+      margin-bottom: 16px;
     }
 
     .hero-content .tagline {
       font-size: 15px;
-      color: #cbd5e1;
-      margin-bottom: 36px;
+      color: var(--text-dark);
+      margin-bottom: 28px;
+      line-height: 1.6;
     }
 
-    .glass-cta-card {
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, 0.18);
+    /* --- ENRICH SYSTEM SOLID BLUE CARD TEMPLATE (From 1000102685.png) --- */
+    .enrich-blue-card {
+      background: linear-gradient(135deg, #0054a6 0%, var(--mh-navy) 100%); /* Beautiful Blue Identity Matrix Gradient */
       border-radius: var(--radius-card);
-      padding: 32px;
+      padding: 32px 24px;
       text-align: left;
+      box-shadow: 0 12px 32px rgba(0, 47, 108, 0.15);
+      color: var(--mh-white);
     }
 
-    .glass-cta-card h3 {
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 20px;
-      color: var(--mh-white);
-      text-transform: uppercase;
-      letter-spacing: 1px;
+    .card-brand-strip {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-      padding-bottom: 10px;
+      padding-bottom: 12px;
+    }
+
+    .card-system-title {
+      font-size: 18px;
+      font-weight: 800;
+      font-style: italic;
+      letter-spacing: -0.5px;
+    }
+
+    .card-tier-tag {
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.18);
+      padding: 4px 12px;
+      border-radius: 4px;
+      letter-spacing: 1px;
     }
 
     .event-details-grid {
@@ -152,7 +153,7 @@
     }
 
     .details-item svg {
-      color: #cbd5e1;
+      color: var(--mh-accent-cyan); /* Enrich bright cyan asset tags */
       flex-shrink: 0;
     }
 
@@ -186,14 +187,14 @@
     .agreement-box input[type="checkbox"] {
       width: 20px;
       height: 20px;
-      accent-color: var(--mh-white);
+      accent-color: var(--mh-accent-cyan);
       margin-top: 2px;
       cursor: pointer;
       flex-shrink: 0;
     }
 
     .agreement-text {
-      font-size: 14px;
+      font-size: 13px;
       color: #e2e8f0;
       line-height: 1.5;
       user-select: none;
@@ -213,12 +214,13 @@
     }
 
     .panel-header img {
-      height: 32px;
+      height: 36px;
       margin-bottom: 12px;
+      object-fit: contain;
     }
 
     .panel-header h2 {
-      font-size: 22px;
+      font-size: 24px;
       font-weight: 700;
       color: var(--mh-navy);
     }
@@ -288,11 +290,11 @@
       display: block;
     }
 
-    /* --- MENU BLOCK DESIGN CARDS --- */
+    /* --- FORM COMPONENT INTERACTION CARDS --- */
     .form-card {
       background: var(--mh-white);
       border-radius: var(--radius-card);
-      box-shadow: 0 4px 16px rgba(12, 35, 64, 0.03);
+      box-shadow: 0 4px 16px rgba(0, 47, 108, 0.02);
       border: 1px solid var(--mh-outline);
       margin-bottom: 20px;
       overflow: hidden;
@@ -300,8 +302,7 @@
     }
 
     .form-card:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 24px rgba(12, 35, 64, 0.06);
+      box-shadow: 0 6px 24px rgba(0, 47, 108, 0.05);
     }
 
     .card-label-strip {
@@ -324,7 +325,7 @@
     }
 
     .card-label-strip label svg {
-      color: var(--mh-navy);
+      color: var(--mh-accent-cyan);
       flex-shrink: 0;
     }
 
@@ -363,8 +364,8 @@
     }
 
     input[type="text"]:focus, input[type="tel"]:focus {
-      border-color: var(--mh-navy);
-      box-shadow: 0 0 0 3px rgba(12, 35, 64, 0.08);
+      border-color: var(--mh-accent-cyan);
+      box-shadow: 0 0 0 3px rgba(0, 148, 210, 0.12);
     }
 
     .phone-input-row {
@@ -378,8 +379,8 @@
     }
 
     .phone-input-row:focus-within {
-      border-color: var(--mh-navy);
-      box-shadow: 0 0 0 3px rgba(12, 35, 64, 0.08);
+      border-color: var(--mh-accent-cyan);
+      box-shadow: 0 0 0 3px rgba(0, 148, 210, 0.12);
     }
 
     .phone-region-tag {
@@ -397,7 +398,7 @@
       box-shadow: none !important;
     }
 
-    /* --- DATE CHIPS --- */
+    /* --- DATE SELECTION INTERACTION CHIPS --- */
     .date-chips-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
@@ -419,7 +420,7 @@
     }
 
     .date-chip:hover {
-      border-color: var(--mh-navy);
+      border-color: var(--mh-accent-cyan);
       background-color: var(--mh-blue-tint);
     }
 
@@ -438,33 +439,33 @@
       margin-top: 1px;
     }
 
-    /* --- BOARDING PASS SUMMARY CLEARANCE --- */
+    /* --- PREMIUM DEPLOYMENT SUMMARY TEMPLATE --- */
     .boarding-pass {
       background: var(--mh-white);
       border-radius: var(--radius-card);
-      box-shadow: 0 8px 24px rgba(12, 35, 64, 0.06);
+      box-shadow: 0 8px 24px rgba(0, 47, 108, 0.06);
       border: 1px solid var(--mh-outline);
       overflow: hidden;
       margin-bottom: 32px;
     }
 
     .pass-header {
-      background: var(--mh-navy);
+      background: linear-gradient(135deg, var(--mh-navy) 0%, #004b87 100%);
       color: var(--mh-white);
-      padding: 24px;
+      padding: 26px 24px;
       text-align: center;
     }
 
     .pass-header h3 {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
       letter-spacing: 2px;
       text-transform: uppercase;
-      color: #94a3b8;
+      color: var(--mh-accent-cyan);
     }
 
     .pass-header .title {
-      font-size: 20px;
+      font-size: 21px;
       font-weight: 700;
       margin-top: 4px;
     }
@@ -524,26 +525,14 @@
     }
 
     .pass-field .value.highlight {
-      color: var(--mh-crimson);
+      color: var(--mh-accent-cyan);
+      font-weight: 700;
     }
 
-    /* --- PREMIUM SUBMISSION CELEBRATION BLOCK --- */
+    /* --- REGISTRY SUBMISSION HUB --- */
     .celebration-view {
       text-align: center;
       padding: 40px 16px;
-    }
-
-    .celebration-banner-burst {
-      width: 64px;
-      height: 64px;
-      margin: 0 auto 24px;
-      background: var(--mh-blue-tint);
-      color: var(--mh-navy);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid var(--mh-outline);
     }
 
     .celebration-view h2 {
@@ -584,7 +573,7 @@
       margin-top: 2px;
     }
 
-    /* --- ACTION NAVIGATION CONTROLS --- */
+    /* --- ACTION ROUTING NAVIGATION SYSTEM --- */
     .action-row {
       display: flex;
       gap: 12px;
@@ -614,7 +603,7 @@
     }
 
     .btn-main:hover {
-      background-color: #051426;
+      background-color: #001f4d;
     }
 
     .btn-secondary-link {
@@ -628,14 +617,18 @@
       background-color: var(--mh-blue-tint);
     }
 
+    /* Pill-button matching the white custom buttons inside the screenshot card system */
     .btn-hero-action {
       background-color: var(--mh-white);
       color: var(--mh-navy);
       width: 100%;
+      border: 1px solid transparent;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
 
     .btn-hero-action:hover {
       background-color: var(--mh-blue-tint);
+      color: var(--mh-navy);
     }
 
     .btn-main:disabled {
@@ -656,8 +649,8 @@
     }
 
     @media(max-width: 576px) {
-      .hero-content h1 { font-size: 30px; }
-      .glass-cta-card { padding: 24px; }
+      .hero-content h1 { font-size: 28px; }
+      .enrich-blue-card { padding: 24px 16px; }
       .event-details-grid { grid-template-columns: 1fr; gap: 14px; }
       .pass-body { grid-template-columns: 1fr; gap: 16px; }
       .pass-full-width { grid-column: span 1; }
@@ -670,17 +663,22 @@
 
   <!-- ==================== STAGE 1: SYSTEM LANDING PANEL ==================== -->
   <div class="hero-container" id="heroStage">
-    <img src="1000073442.png" class="hero-bg" alt="KLIMS Fleet Dynamic Asset Cover" />
-    <div class="hero-overlay"></div>
+    <!-- Header mimic from 1000102685.png top-bar standard guidelines -->
+    <div class="hero-header-bar">
+      <img src="https://mitec.com.my/static/img/logos/mitec-new-logo.png" class="brand-logo-panel" alt="MITEC Corporate Branding" />
+    </div>
     
     <div class="hero-content">
-      <img src="https://mitec.com.my/static/img/logos/mitec-new-logo.png" class="brand-logo-panel" style="filter: brightness(0) invert(1);" alt="MITEC White Corporate Branding" />
       <h1>KLIMS 2026</h1>
       <div class="subtitle">Crew Recruitment Portal</div>
       <p class="tagline">Join Malaysia's largest automotive exhibition event footprint. Applications are officially open.</p>
       
-      <div class="glass-cta-card">
-        <h3>Deployment Information</h3>
+      <!-- Premium Dark Blue System Card encapsulating structural workspace assets -->
+      <div class="enrich-blue-card">
+        <div class="card-brand-strip">
+          <span class="card-system-title">Enrich</span>
+          <span class="card-tier-tag">CREW MANIFEST</span>
+        </div>
         
         <div class="event-details-grid">
           <div class="details-item">
@@ -722,6 +720,8 @@
             I verify that all personal identification declarations are legally accurate and consent to data storage loops mapping to official workspace registry protocols.
           </span>
         </label>
+        
+        <!-- White card buttons matching custom elements embedded inside 1000102685.png widgets -->
         <button type="button" class="btn-main btn-hero-action" id="btnHeroAdvance">Apply Now</button>
       </div>
     </div>
@@ -744,11 +744,11 @@
 
     <form id="klimsForm" novalidate>
       
-      <!-- SLIDE STEP 1: COMPREHENSIVE BRIEF -->
+      <!-- SLIDE STEP 1: ORIENTATION RESOURCE BRIEF -->
       <div class="form-step active" id="step1">
         <div class="form-card media-card">
           <video controls>
-            <source src="1000102137.mp4" type="video/mp4">
+            <source src="gemini_generated_video_91d11db3.mp4" type="video/mp4">
             Your browser does not support the video element frame.
           </video>
         </div>
@@ -776,6 +776,7 @@
       <!-- SLIDE STEP 2: PROFILE DATA ENTRY -->
       <div class="form-step" id="step2">
         
+        <!-- Full Identity Component -->
         <div class="form-card">
           <div class="card-label-strip">
             <label class="req">
@@ -788,18 +789,23 @@
           </div>
         </div>
 
+        <!-- National Identity Identification (MyKad Entry Block) -->
         <div class="form-card">
           <div class="card-label-strip">
             <label class="req">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="4"></line><line x1="8" y1="2" x2="8" y2="4"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
               MyKad Number
             </label>
           </div>
           <div class="card-input-pane">
-            <input type="text" name="mykad" required placeholder="12 DIGITS NO SPACES OR DASHES" maxlength="12" inputmode="numeric">
+            <input type="text" id="mykadInput" name="mykad" required placeholder="YYMMDDXXXXXX" autocomplete="off">
+            <span id="mykadWarning" style="color: var(--mh-crimson); display: none; font-size: 12px; margin-top: 6px; font-weight: 600;">
+              Warning: MyKad must be exactly 12 digits!
+            </span>
           </div>
         </div>
 
+        <!-- Comms Validation Module (Phone Entry Block) -->
         <div class="form-card">
           <div class="card-label-strip">
             <label class="req">
@@ -808,13 +814,17 @@
             </label>
           </div>
           <div class="card-input-pane">
-            <div class="phone-input-row">
+            <div class="phone-input-row" id="phoneContainerRow">
               <span class="phone-region-tag">+60</span>
-              <input type="tel" name="phone" required placeholder="123456789" inputmode="numeric">
+              <input type="tel" id="phoneInput" name="phone" required placeholder="123456789" inputmode="numeric" autocomplete="off">
             </div>
+            <span id="phoneWarning" style="color: var(--mh-crimson); display: none; font-size: 12px; margin-top: 6px; font-weight: 600;">
+              Warning: Phone must start with 1 followed by exactly 8 or 9 digits!
+            </span>
           </div>
         </div>
 
+        <!-- Deployment Operations Selection System -->
         <div class="form-card">
           <div class="card-label-strip">
             <label class="req">
@@ -838,7 +848,7 @@
       </div>
 
 
-      <!-- SLIDE STEP 3: SUMMARY BOARDING PASS -->
+      <!-- SLIDE STEP 3: BOARDING PASS MANIFEST CLEARANCE -->
       <div class="form-step" id="step3">
         
         <div class="boarding-pass">
@@ -884,236 +894,267 @@
     </form>
   </div>
 
+  <!-- ==================== LOGIC EXECUTION RUNTIME CONTROLLERS ==================== -->
   <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxkPQh4whskPuB6jK_4_ylzM5OKN6lGaIGhj04DZA0rTET_Zc3hk36ikgLSQwBfP7lL-A/exec";
 
-const heroStage = document.getElementById('heroStage');
-const applicationStage = document.getElementById('applicationStage');
-const heroAgreementCheck = document.getElementById('heroAgreementCheck');
-const btnHeroAdvance = document.getElementById('btnHeroAdvance');
+    const heroStage = document.getElementById('heroStage');
+    const applicationStage = document.getElementById('applicationStage');
+    const heroAgreementCheck = document.getElementById('heroAgreementCheck');
+    const btnHeroAdvance = document.getElementById('btnHeroAdvance');
 
-const steps = document.querySelectorAll('.form-step');
-const nodes = document.querySelectorAll('.step-indicator');
-const form = document.getElementById('klimsForm');
+    const steps = document.querySelectorAll('.form-step');
+    const nodes = document.querySelectorAll('.step-indicator');
+    const form = document.getElementById('klimsForm');
 
-const nameInput = document.getElementsByName('name')[0];
-const mykadInput = document.getElementsByName('mykad')[0];
-const phoneInput = document.getElementsByName('phone')[0];
-const hiddenSelect = document.getElementsByName('date_of_choice')[0];
+    const nameInput = document.getElementsByName('name')[0];
+    const mykadInput = document.getElementById('mykadInput');
+    const mykadWarning = document.getElementById('mykadWarning');
+    const phoneInput = document.getElementById('phoneInput');
+    const phoneContainerRow = document.getElementById('phoneContainerRow');
+    const phoneWarning = document.getElementById('phoneWarning');
+    const hiddenSelect = document.getElementsByName('date_of_choice')[0];
 
-let chosenDatesCache = [];
+    let chosenDatesCache = [];
 
 
-/* =========================
-   DATE CHIP GENERATOR
-========================= */
-const chipsContainer = document.getElementById('chipsContainer');
+    /* =========================
+       DATE CHIP GENERATOR
+    ========================= */
+    const chipsContainer = document.getElementById('chipsContainer');
 
-for (let day = 11; day <= 21; day++) {
-  const chip = document.createElement('div');
-  chip.className = 'date-chip';
-  chip.setAttribute('data-value', `${day} June`);
-  chip.innerHTML = `${day} Jun <span class="month-tag">2026</span>`;
+    for (let day = 11; day <= 21; day++) {
+      const chip = document.createElement('div');
+      chip.className = 'date-chip';
+      chip.setAttribute('data-value', `${day} June`);
+      chip.innerHTML = `${day} Jun <span class="month-tag">2026</span>`;
 
-  chip.addEventListener('click', function () {
-    const val = this.getAttribute('data-value');
-    this.classList.toggle('active');
+      chip.addEventListener('click', function () {
+        const val = this.getAttribute('data-value');
+        this.classList.toggle('active');
 
-    if (this.classList.contains('active')) {
-      if (!chosenDatesCache.includes(val)) chosenDatesCache.push(val);
-    } else {
-      chosenDatesCache = chosenDatesCache.filter(i => i !== val);
+        if (this.classList.contains('active')) {
+          if (!chosenDatesCache.includes(val)) chosenDatesCache.push(val);
+        } else {
+          chosenDatesCache = chosenDatesCache.filter(i => i !== val);
+        }
+
+        syncChips();
+      });
+
+      chipsContainer.appendChild(chip);
     }
 
-    syncChips();
-  });
-
-  chipsContainer.appendChild(chip);
-}
-
-function syncChips() {
-  hiddenSelect.innerHTML = '';
-  chosenDatesCache.forEach(d => {
-    const opt = document.createElement('option');
-    opt.value = d;
-    opt.selected = true;
-    hiddenSelect.appendChild(opt);
-  });
-}
+    function syncChips() {
+      hiddenSelect.innerHTML = '';
+      chosenDatesCache.forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d;
+        opt.selected = true;
+        hiddenSelect.appendChild(opt);
+      });
+    }
 
 
-/* =========================
-   SYNC FUNCTION
-========================= */
-function syncChipsToSelect() {
-  if (!hiddenSelect) return;
+    /* =========================
+       SYNC FUNCTION
+    ========================= */
+    function syncChipsToSelect() {
+      if (!hiddenSelect) return;
 
-  hiddenSelect.innerHTML = "";
+      hiddenSelect.innerHTML = "";
 
-  chosenDatesCache.forEach(dateStr => {
-    const opt = document.createElement('option');
-    opt.value = dateStr;
-    opt.selected = true;
-    hiddenSelect.appendChild(opt);
-  });
-}
+      chosenDatesCache.forEach(dateStr => {
+        const opt = document.createElement('option');
+        opt.value = dateStr;
+        opt.selected = true;
+        hiddenSelect.appendChild(opt);
+      });
+    }
 
-/* =========================
-/* =========================
-   INPUT VALIDATION RULES
-========================= */
+    /* =========================
+       INPUT VALIDATION RULES
+    ========================= */
 
-// 1. NAME → UPPERCASE ONLY
-nameInput.addEventListener('input', e => {
-  e.target.value = e.target.value.toUpperCase();
-});
-
-// 2. MYKAD → Exactly 12 Digits Only
-mykadInput.addEventListener('input', e => {
-  // Enforce digits only and cap it at 12 digits max
-  e.target.value = e.target.value.replace(/\D/g, '').slice(0, 12);
-});
-
-mykadInput.addEventListener('blur', e => {
-  const value = e.target.value;
-  
-  if (value.length === 12) {
-    // Return as a text string with a '+' prefix
-    const mykadResult = '+' + value; 
-    console.log("MyKad Output (Text):", mykadResult);
-    // standard output example: "+990101145151"
-  } else {
-    console.warn("Invalid MyKad: Must be exactly 12 digits.");
-  }
-});
-
-// 3. PHONE → Starts with 1 followed by 8 or 9 digits
-phoneInput.addEventListener('input', e => {
-  let value = e.target.value.replace(/\D/g, '');
-  
-  // Enforce that it must start with 1
-  if (value.length > 0 && !value.startsWith('1')) {
-    value = ''; 
-  }
-  
-  // Cap length at 10 digits total (1 + 9 digits max)
-  e.target.value = value.slice(0, 10);
-});
-
-phoneInput.addEventListener('blur', e => {
-  const value = e.target.value;
-  
-  // Validates if length is either 9 digits (1+8) or 10 digits (1+9)
-  if (value.startsWith('1') && (value.length === 9 || value.length === 10)) {
-    // Prepend '60' and convert the final string into a Number type
-    const phoneResult = Number('60' + value);
-    console.log("Phone Output (Number):", phoneResult);
-    // standard output example: 60123456789
-  } else {
-    console.warn("Invalid Phone: Must be 1 followed by 8 or 9 digits.");
-  }
-});
-
-
-/* =========================
-   STEP NAVIGATION
-========================= */
-function jumpToStep(i) {
-  steps.forEach((s, idx) => {
-    s.classList.toggle('active', idx === i);
-    nodes[idx].classList.toggle('active', idx <= i);
-  });
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-/* =========================
-   HERO ENTRY
-========================= */
-btnHeroAdvance.addEventListener('click', () => {
-  if (!heroAgreementCheck.checked) {
-    alert("Please acknowledge the requirement.");
-    return;
-  }
-  heroStage.style.display = 'none';
-  applicationStage.style.display = 'block';
-  jumpToStep(0);
-});
-/* =========================
-   STEP BUTTONS
-========================= */
-document.getElementById('btnToStep2').onclick = () => jumpToStep(1);
-
-document.getElementById('btnToStep3').onclick = () => {
-  if (
-    !nameInput.value ||
-    !mykadInput.value ||
-    !phoneInput.value ||
-    chosenDatesCache.length === 0
-  ) {
-    alert("Complete all fields first.");
-    return;
-  }
-
-  document.getElementById('sumName').textContent = nameInput.value;
-  document.getElementById('sumMykad').textContent = mykadInput.value;
-  document.getElementById('sumPhone').textContent = "601" + phoneInput.value.replace(/^0+/, '');
-  document.getElementById('sumDates').textContent = chosenDatesCache.join(', ');
-
-  jumpToStep(2);
-};
-
-
-/* =========================
-   SUBMIT HANDLER
-========================= */
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  const submitBtn = document.getElementById('submitBtn');
-  submitBtn.disabled = true;
-  submitBtn.textContent = "Submitting...";
-
-  try {
-    let phone = phoneInput.value.replace(/^0+/, '');
-    phone = "601" + phone;
-
-    const payload = {
-      name: nameInput.value,
-      mykad: mykadInput.value,
-      phone: phone,
-      dates: chosenDatesCache.join(', ')
-    };
-
-    const res = await fetch(WEB_APP_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain" },
-      body: JSON.stringify(payload)
+    // NAME → UPPERCASE ONLY
+    nameInput.addEventListener('input', e => {
+      e.target.value = e.target.value.toUpperCase();
     });
 
-    const ref = "KLIMS-2026-" + Math.floor(10000 + Math.random() * 90000);
+    // MYKAD → Exactly 12 Digits Only with Real-time Capping and Warnings
+    mykadInput.addEventListener('input', e => {
+      let value = e.target.value.replace(/\D/g, '');
+      
+      // Strict Stop: Cuts off any input after the 12th digit
+      e.target.value = value.slice(0, 12);
 
-    // FIXED: correct container (no more crash)
-    applicationStage.innerHTML = `
-      <div class="celebration-view">
-        <h2>✓ Application Received</h2>
-        <p>KLIMS 2026 Crew submission successful.</p>
+      // Dynamic Warning Handling
+      if (e.target.value.length === 12) {
+        mykadWarning.style.display = 'none';
+        mykadInput.style.borderColor = ''; 
+      } else if (e.target.value.length > 0) {
+        mykadWarning.style.display = 'block';
+      } else {
+        mykadWarning.style.display = 'none';
+      }
+    });
 
-        <div class="reference-plate">
-          <div class="plate-title">Reference ID</div>
-          <div class="plate-code">${ref}</div>
-        </div>
+    // Validation when user clicks away from the field (Blur)
+    mykadInput.addEventListener('blur', e => {
+      const currentLength = e.target.value.length;
+      if (currentLength > 0 && currentLength < 12) {
+        mykadWarning.style.display = 'block';
+        mykadInput.style.borderColor = 'var(--mh-crimson)'; 
+      } else if (currentLength === 0) {
+        mykadWarning.style.display = 'none';
+        mykadInput.style.borderColor = '';
+      }
+    });
 
-        <p>System will contact shortlisted candidates.</p>
-      </div>
-    `;
+    // PHONE → Rules enforce starting with 1 followed strictly by 8 digits OR 9 digits
+    phoneInput.addEventListener('input', e => {
+      let value = e.target.value.replace(/\D/g, '');
+      
+      // Enforce absolute rule that it must start with 1
+      if (value.length > 0 && !value.startsWith('1')) {
+        value = ''; 
+      }
+      
+      // Cap characters at 10 max (which perfectly accommodates up to 1 + 9 digits)
+      e.target.value = value.slice(0, 10);
 
-  } catch (err) {
-    console.error(err);
-    alert("Submission failed. Check deployment or internet.");
-    submitBtn.disabled = false;
-    submitBtn.textContent = "Transmit Manifest";
-  }
-});
+      // Dynamic Warning Handling: Cleared ONLY when input hits exactly 9 total (1+8) or 10 total (1+9)
+      if (e.target.value.length === 9 || e.target.value.length === 10) {
+        phoneWarning.style.display = 'none';
+        phoneContainerRow.style.borderColor = '';
+      } else if (e.target.value.length > 0) {
+        phoneWarning.style.display = 'block';
+      } else {
+        phoneWarning.style.display = 'none';
+      }
+    });
+
+    // Phone Out-of-Focus Validation (Blur Handler)
+    phoneInput.addEventListener('blur', e => {
+      const value = e.target.value;
+      
+      // Asserts that the field is valid only if length satisfies the 1+8 or 1+9 constraint
+      if (value.length > 0 && !(value.length === 9 || value.length === 10)) {
+        phoneWarning.style.display = 'block';
+        phoneContainerRow.style.borderColor = 'var(--mh-crimson)';
+      } else if (value.length === 0) {
+        phoneWarning.style.display = 'none';
+        phoneContainerRow.style.borderColor = '';
+      }
+    });
+
+    /* =========================
+       STEP NAVIGATION
+    ========================= */
+    function jumpToStep(i) {
+      steps.forEach((s, idx) => {
+        s.classList.toggle('active', idx === i);
+        nodes[idx].classList.toggle('active', idx <= i);
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* =========================
+       HERO ENTRY
+    ========================= */
+    btnHeroAdvance.addEventListener('click', () => {
+      if (!heroAgreementCheck.checked) {
+        alert("Please acknowledge the requirement.");
+        return;
+      }
+      heroStage.style.display = 'none';
+      applicationStage.style.display = 'block';
+      jumpToStep(0);
+    });
+
+    /* =========================
+       STEP BUTTONS
+    ========================= */
+    document.getElementById('btnToStep2').onclick = () => jumpToStep(1);
+    document.getElementById('backToStep1').onclick = () => jumpToStep(0);
+    document.getElementById('backToStep2').onclick = () => jumpToStep(1);
+
+    document.getElementById('btnToStep3').onclick = () => {
+      const phoneVal = phoneInput.value;
+
+      // Deep data layout structure check verification before moving forward
+      if (
+        !nameInput.value ||
+        !mykadInput.value ||
+        mykadInput.value.length !== 12 ||
+        !phoneVal ||
+        !(phoneVal.length === 9 || phoneVal.length === 10) ||
+        chosenDatesCache.length === 0
+      ) {
+        alert("Complete all fields correctly. Phone must start with 1 followed by either 8 or 9 digits, and MyKad must be exactly 12 digits.");
+        return;
+      }
+
+      // Generate localized data outputs for the preview boarding pass panel card
+      document.getElementById('sumName').textContent = nameInput.value;
+      document.getElementById('sumMykad').textContent = mykadInput.value;
+      document.getElementById('sumPhone').textContent = "60" + phoneVal;
+      document.getElementById('sumDates').textContent = chosenDatesCache.join(', ');
+
+      jumpToStep(2);
+    };
+
+
+    /* =========================
+       SUBMIT HANDLER
+    ========================= */
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Submitting...";
+
+      try {
+        // Enforces type conformity rules casting to a pure numeric JavaScript Number type
+        const safeNumericPhonePayload = Number("60" + phoneInput.value);
+
+        const payload = {
+          name: nameInput.value,
+          mykad: mykadInput.value,
+          phone: safeNumericPhonePayload,
+          dates: chosenDatesCache.join(', ')
+        };
+
+        const res = await fetch(WEB_APP_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify(payload)
+        });
+
+        const ref = "KLIMS-2026-" + Math.floor(10000 + Math.random() * 90000);
+
+        applicationStage.innerHTML = `
+          <div class="celebration-view">
+            <h2>✓ Application Received</h2>
+            <p>KLIMS 2026 Crew submission successful.</p>
+
+            <div class="reference-plate">
+              <div class="plate-title">Reference ID</div>
+              <div class="plate-code">${ref}</div>
+            </div>
+
+            <p>System will contact shortlisted candidates.</p>
+          </div>
+        `;
+
+      } catch (err) {
+        console.error(err);
+        alert("Submission failed. Check deployment or internet.");
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Transmit Manifest";
+      }
+    });
   </script>
 </body>
 </html>
