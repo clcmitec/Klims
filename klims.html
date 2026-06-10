@@ -1,0 +1,679 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KLIMS 2026 — Recruitment Registry</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+    :root {
+      /* Malaysia Airlines Inspired Palette */
+      --mh-blue: #0c2340;
+      --mh-blue-hover: #061324;
+      --mh-red: #d11242;
+      --mh-on-primary: #ffffff;
+      
+      /* Structural & Neutral Tokens */
+      --md-surface: #ffffff;
+      --md-background: #f4f6f9;
+      --md-on-surface: #1e293b;
+      --md-on-surface-variant: #64748b;
+      --md-outline: #cbd5e1;
+      --md-outline-variant: #e2e8f0;
+      --md-error: var(--mh-red);
+      
+      /* Architecture System */
+      --font-stack: 'Roboto', system-ui, -apple-system, sans-serif;
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-full: 100px;
+    }
+
+    * { 
+      box-sizing: border-box; 
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: var(--font-stack);
+      background-color: var(--md-background);
+      color: var(--md-on-surface);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
+      padding: 40px 16px;
+    }
+
+    .wrap {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    /* Premium Minimalist Card Container */
+    .card {
+      background-color: var(--md-surface);
+      border: 1px solid var(--md-outline-variant);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 4px 12px rgba(12, 35, 64, 0.04);
+      overflow: hidden;
+    }
+
+    .header {
+      padding: 32px 32px 20px;
+      border-bottom: 2px solid var(--mh-blue);
+      background-color: var(--md-surface);
+    }
+
+    .header img {
+      height: 36px;
+      display: block;
+      margin-bottom: 20px;
+      object-fit: contain;
+    }
+
+    .header h2 {
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--mh-blue);
+      letter-spacing: -0.3px;
+    }
+
+    /* Step Progress Tracker Bar */
+    .step-tracker {
+      display: flex;
+      justify-content: space-between;
+      padding: 16px 32px;
+      background-color: #fafbfc;
+      border-bottom: 1px solid var(--md-outline-variant);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--md-on-surface-variant);
+    }
+
+    .step-node {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.2s ease;
+    }
+
+    .step-node.active {
+      color: var(--mh-blue);
+    }
+
+    .step-circle {
+      width: 20px;
+      height: 20px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--md-outline);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      background: var(--md-surface);
+      transition: all 0.2s ease;
+    }
+
+    .step-node.active .step-circle {
+      border-color: var(--mh-blue);
+      background-color: var(--mh-blue);
+      color: var(--mh-on-primary);
+    }
+    
+    .form-content {
+      padding: 32px;
+    }
+
+    /* Section Step Toggling */
+    .form-step {
+      display: none;
+    }
+
+    .form-step.active {
+      display: block;
+    }
+
+    /* Media Blocks Styling */
+    .media-block {
+      width: 100%;
+      border-radius: var(--radius-md);
+      margin-bottom: 24px;
+      border: 1px solid var(--md-outline-variant);
+      display: block;
+      background-color: var(--md-background);
+    }
+    
+    /* Input Fields Structural System */
+    .input-group {
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--mh-blue);
+      margin-bottom: 8px;
+    }
+
+    .req::after {
+      content: " *";
+      color: var(--md-error);
+    }
+    
+    input[type="text"], input[type="tel"], select { 
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid var(--md-outline);
+      border-radius: var(--radius-sm);
+      font-size: 16px;
+      background-color: var(--md-surface);
+      color: var(--md-on-surface);
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      font-family: var(--font-stack);
+    }
+    
+    input:focus, select:focus {
+      border-color: var(--mh-blue);
+      box-shadow: 0 0 0 1px var(--mh-blue);
+    }
+
+    /* Phone Input Layout Container */
+    .phone-container {
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--md-outline);
+      border-radius: var(--radius-sm);
+      background-color: var(--md-surface);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .phone-container:focus-within {
+      border-color: var(--mh-blue);
+      box-shadow: 0 0 0 1px var(--mh-blue);
+    }
+
+    .phone-prefix {
+      padding: 14px 12px 14px 16px;
+      color: var(--mh-blue);
+      font-size: 16px;
+      font-weight: 500;
+      background-color: var(--md-background);
+      border-right: 1px solid var(--md-outline);
+      user-select: none;
+    }
+
+    .phone-container input {
+      border: none !important;
+      box-shadow: none !important;
+      padding-left: 12px;
+    }
+
+    /* Outlined Upload Field Box */
+    .fileBox {
+      border: 1px dashed var(--md-outline);
+      border-radius: var(--radius-sm);
+      padding: 24px;
+      background-color: var(--md-background);
+      text-align: center;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+    
+    .fileBox:hover {
+      border-color: var(--mh-blue);
+      background-color: #f1f5f9;
+    }
+
+    .fileBox input {
+      width: 100%;
+      font-size: 14px;
+      color: var(--md-on-surface-variant);
+      cursor: pointer;
+    }
+
+    /* Multi-Select Field System Override */
+    select[multiple] {
+      padding: 8px;
+      min-height: 160px;
+    }
+
+    select[multiple] option {
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 2px;
+      font-size: 15px;
+    }
+
+    select[multiple] option:checked {
+      background: var(--md-outline-variant) linear-gradient(0deg, var(--md-outline-variant) 0%, var(--md-outline-variant) 100%);
+      color: var(--mh-blue);
+      font-weight: 500;
+    }
+    
+    .helper-text {
+      display: block;
+      color: var(--md-on-surface-variant);
+      margin-top: 6px;
+      font-size: 12px;
+    }
+
+    /* Outlined Statement Agreement Block */
+    .agreement-container {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 16px;
+      border: 1px solid var(--md-outline-variant);
+      border-radius: var(--radius-md);
+      background-color: #fafbfc;
+      margin-top: 24px;
+      cursor: pointer;
+    }
+
+    .agreement-container input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--mh-blue);
+      margin-top: 2px;
+      cursor: pointer;
+    }
+
+    .agreement-text {
+      font-size: 14px;
+      color: var(--md-on-surface);
+      user-select: none;
+    }
+
+    /* Summary Matrix Display Box */
+    .summary-box {
+      border: 1px solid var(--md-outline-variant);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .summary-row {
+      display: flex;
+      border-bottom: 1px solid var(--md-outline-variant);
+      padding: 14px 16px;
+      font-size: 15px;
+    }
+
+    .summary-row:last-child {
+      border-bottom: none;
+    }
+
+    .summary-label {
+      width: 35%;
+      font-weight: 500;
+      color: var(--mh-blue);
+    }
+
+    .summary-value {
+      width: 65%;
+      color: var(--md-on-surface);
+      word-break: break-word;
+    }
+
+    /* Actions Step Navigation Footer */
+    .action-footer {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    /* Brand Button Architecture System */
+    .btnPrimary, .btnSecondary { 
+      border: none;
+      border-radius: var(--radius-sm); 
+      padding: 14px 24px;
+      font-weight: 500;
+      font-size: 14px;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      transition: background-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btnPrimary {
+      background-color: var(--mh-blue);
+      color: var(--mh-on-primary);
+      flex: 2;
+    }
+
+    .btnPrimary:hover {
+      background-color: var(--mh-blue-hover);
+    }
+
+    .btnSecondary {
+      background-color: var(--md-surface);
+      color: var(--md-on-surface-variant);
+      border: 1px solid var(--md-outline);
+      flex: 1;
+    }
+
+    .btnSecondary:hover {
+      background-color: var(--md-background);
+      color: var(--mh-blue);
+      border-color: var(--mh-blue);
+    }
+
+    .btnPrimary:focus, .btnSecondary:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(12, 35, 64, 0.2);
+    }
+
+    .btnPrimary:disabled {
+      background-color: var(--md-outline);
+      color: var(--md-on-surface-variant);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* Success Submission Screen View Container */
+    .success-container {
+      text-align: center;
+      padding: 48px 16px;
+    }
+
+    .success-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 24px;
+      border: 2px solid var(--mh-blue);
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--mh-blue);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="card">
+      
+      <div class="header">
+        <img src="https://mitec.com.my/static/img/logos/mitec-new-logo.png" alt="MITEC Logo" />
+        <h2>KLIMS 2026 Recruitment</h2>
+      </div>
+
+      <div class="step-tracker" id="stepTracker">
+        <div class="step-node active" id="node1"><span class="step-circle">1</span> Info</div>
+        <div class="step-node" id="node2"><span class="step-circle">2</span> Questions</div>
+        <div class="step-node" id="node3"><span class="step-circle">3</span> Review</div>
+      </div>
+      
+      <div class="form-content">
+        <form id="klimsForm" novalidate>
+          
+          <div class="form-step active" id="step1">
+            <img src="1000073442.png" class="media-block" alt="MITEC Exhibition Wing" />
+            
+            <video controls class="media-block">
+              <source src="1000102137.mp4" type="video/mp4">
+              Your browser does not support the video block element.
+            </video>
+
+            <p style="font-size: 15px; color: var(--md-on-surface-variant); margin-bottom: 12px;">
+              Welcome to the digital procurement registry platform for the upcoming Kuala Lumpur International Motor Show (KLIMS) 2026 at MITEC. Please verify the timeline constraints before advancing.
+            </p>
+
+            <label class="agreement-container" id="agreeLabel">
+              <input type="checkbox" id="agreementCheck">
+              <span class="agreement-text">
+                I agree to provide accurate identification data and understand that performance verification documents will be securely transferred over the workspace network.
+              </span>
+            </label>
+
+            <div class="action-footer">
+              <button type="button" class="btnPrimary" id="toStep2">Next</button>
+            </div>
+          </div>
+
+
+          <div class="form-step" id="step2">
+            
+            <div class="input-group">
+              <label class="req">Name</label>
+              <input type="text" name="name" required placeholder="Full name as per MyKad" style="text-transform:uppercase">
+            </div>
+
+            <div class="input-group">
+              <label class="req">MyKad Number</label>
+              <input type="text" name="mykad" required placeholder="12 digits (no dashes)" maxlength="12" inputmode="numeric">
+            </div>
+
+            <div class="input-group">
+              <label class="req">Camera / ID Capture</label>
+              <div class="fileBox">
+                <input type="file" name="camera" accept="image/*" capture="environment" required>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label class="req">Phone</label>
+              <div class="phone-container">
+                <span class="phone-prefix">+60</span>
+                <input type="tel" name="phone" required placeholder="12 345 6789" inputmode="numeric">
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label class="req">Date of Choice (11-21 June 2026)</label>
+              <select name="date_of_choice" multiple required size="6">
+                <script>
+                  for(let i = 11; i <= 21; i++) {
+                    document.write(`<option value="${i} June"> ${i} June 2026</option>`);
+                  }
+                </script>
+              </select>
+              <small class="helper-text">
+                * Hold down Ctrl (Windows) or Command (Mac) to multi-select options.
+              </small>
+            </div>
+
+            <div class="action-footer">
+              <button type="button" class="btnSecondary" id="backToStep1">Back</button>
+              <button type="button" class="btnPrimary" id="toStep3">Next</button>
+            </div>
+          </div>
+
+
+          <div class="form-step" id="step3">
+            <h3 style="font-size: 18px; font-weight: 500; margin-bottom: 16px; color: var(--mh-blue)">Review Your Details</h3>
+            
+            <div class="summary-box">
+              <div class="summary-row">
+                <div class="summary-label">Name</div>
+                <div class="summary-value" id="sumName">-</div>
+              </div>
+              <div class="summary-row">
+                <div class="summary-label">MyKad</div>
+                <div class="summary-value" id="sumMykad">-</div>
+              </div>
+              <div class="summary-row">
+                <div class="summary-label">Phone</div>
+                <div class="summary-value" id="sumPhone">-</div>
+              </div>
+              <div class="summary-row">
+                <div class="summary-label">Selected Dates</div>
+                <div class="summary-value" id="sumDates">-</div>
+              </div>
+              <div class="summary-row">
+                <div class="summary-label">ID Capture</div>
+                <div class="summary-value" id="sumFile">-</div>
+              </div>
+            </div>
+
+            <div class="action-footer">
+              <button type="button" class="btnSecondary" id="backToStep2">Back</button>
+              <button type="submit" class="btnPrimary" id="submitBtn">Submit Application</button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwhJH1utHw2HlXdQg29lBRjlk57nfEeP0_OlxWafIExNEBLpwQp2_qc3BiEOIXX4Wyd1A/exec";
+
+    // Application Workflow UI DOM Selectors
+    const steps = document.querySelectorAll('.form-step');
+    const nodes = document.querySelectorAll('.step-node');
+    
+    const agreementCheck = document.getElementById('agreementCheck');
+    const form = document.getElementById('klimsForm');
+    const nameInput = document.getElementsByName('name')[0];
+    const mykadInput = document.getElementsByName('mykad')[0];
+    const phoneInput = document.getElementsByName('phone')[0];
+    const dateSelect = document.querySelector('[name="date_of_choice"]');
+    const fileField = document.querySelector('[name="camera"]');
+
+    // UI Input Auto-Formatting Action Listeners
+    nameInput.addEventListener('input', function(e) {
+      e.target.value = e.target.value.toUpperCase();
+    });
+
+    [mykadInput, phoneInput].forEach(inputField => {
+      inputField.addEventListener('input', function(e) {
+        e.target.value = e.target.value.replace(/[^\d]/g, '');
+      });
+    });
+
+    // Multi-Step Display Matrix Router
+    function navigateToStep(stepIdx) {
+      steps.forEach((step, i) => {
+        step.classList.toggle('active', i === stepIdx);
+        nodes[i].classList.toggle('active', i <= stepIdx);
+      });
+    }
+
+    // Step 1 Navigation Verification Hook
+    document.getElementById('toStep2').addEventListener('click', () => {
+      if (!agreementCheck.checked) {
+        alert("Please acknowledge and tick the statement agreement to proceed.");
+        return;
+      }
+      navigateToStep(1);
+    });
+
+    // Step 2 Summary Compilation Router Hook
+    document.getElementById('toStep3').addEventListener('click', () => {
+      if (!nameInput.checkValidity() || !mykadInput.checkValidity() || !phoneInput.checkValidity() || !dateSelect.checkValidity() || !fileField.checkValidity()) {
+        alert("Please fulfill all mandatory questions accurately to continue.");
+        return;
+      }
+
+      // Generate formatted values for display verification matrix
+      let rawPhone = phoneInput.value.trim();
+      if (rawPhone.startsWith('60')) rawPhone = rawPhone.slice(2);
+      else if (rawPhone.startsWith('0')) rawPhone = rawPhone.slice(1);
+      const visualPhone = '+60 ' + rawPhone;
+
+      const selectedDatesArray = Array.from(dateSelect.selectedOptions).map(opt => opt.value).join(', ');
+      const capturedFileName = fileField.files[0] ? fileField.files[0].name : "No file added";
+
+      // Bind directly to summary grid nodes
+      document.getElementById('sumName').textContent = nameInput.value.trim();
+      document.getElementById('sumMykad').textContent = mykadInput.value.trim();
+      document.getElementById('sumPhone').textContent = visualPhone;
+      document.getElementById('sumDates').textContent = selectedDatesArray;
+      document.getElementById('sumFile').textContent = capturedFileName;
+
+      navigateToStep(2);
+    });
+
+    // Step Backward Event Click Handlers
+    document.getElementById('backToStep1').addEventListener('click', () => navigateToStep(0));
+    document.getElementById('backToStep2').addEventListener('click', () => navigateToStep(1));
+
+    // Base64 Binary Stream Data Conversion System
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    }
+
+    // Final Transmission Post Processing Loop
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Transmitting Details...";
+
+      try {
+        const selectedDates = Array.from(dateSelect.selectedOptions).map(opt => opt.value).join(', ');
+        const targetUploadedFile = fileField.files[0];
+        
+        let base64FileString = "";
+        let base64FileName = "";
+        
+        if (targetUploadedFile) {
+          base64FileString = await fileToBase64(targetUploadedFile);
+          base64FileName = targetUploadedFile.name;
+        }
+
+        // Structural phone validation clean handler matching API backend schema specifications
+        let cleanedPhone = phoneInput.value.trim();
+        if (cleanedPhone.startsWith('60')) {
+          cleanedPhone = cleanedPhone.slice(2);
+        } else if (cleanedPhone.startsWith('0')) {
+          cleanedPhone = cleanedPhone.slice(1);
+        }
+        const finalizedPhonePayload = '60' + cleanedPhone;
+
+        const packetPayload = {
+          name: nameInput.value.trim(),
+          mykad: mykadInput.value.trim(),
+          camera_base64: base64FileString,
+          camera_filename: base64FileName,
+          phone: finalizedPhonePayload,
+          date_of_choice: selectedDates
+        };
+
+        await fetch(WEB_APP_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(packetPayload)
+        });
+
+        // Hide Navigation Headers on success screen display layout
+        document.getElementById('stepTracker').style.display = 'none';
+
+        // STEP 4: AUTOMOTIVE HIGH-GEAR SUCCESS VIEW DISPLAY
+        document.querySelector('.form-content').innerHTML = `
+          <div class="success-container">
+            <div class="success-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            <h3 style="color: var(--mh-blue); font-size: 22px; font-weight: 500; margin-bottom: 12px;">Thank You for the Response</h3>
+            <p style="color: var(--md-on-surface-variant); font-size: 14px;">Your application is officially <strong>locked in</strong>! You're on track for KLIMS 2026, and our team will review your crew details soon.</p>
+          </div>
+        `;
+
+      } catch (error) {
+        console.error("Transmission error logged:", error);
+        alert("System connection interface timeout. Please retry.");
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit Application";
+      }
+    });
+  </script>
+</body>
+</html>
