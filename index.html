@@ -903,35 +903,44 @@ const hiddenSelect = document.getElementsByName('date_of_choice')[0];
 
 let chosenDatesCache = [];
 
+
 /* =========================
    DATE CHIP GENERATOR
 ========================= */
 const chipsContainer = document.getElementById('chipsContainer');
 
-if (chipsContainer) {
-  for (let day = 11; day <= 21; day++) {
-    const chip = document.createElement('div');
-    chip.className = 'date-chip';
-    chip.dataset.value = `${day} June`;
+for (let day = 11; day <= 21; day++) {
+  const chip = document.createElement('div');
+  chip.className = 'date-chip';
+  chip.setAttribute('data-value', `${day} June`);
+  chip.innerHTML = `${day} Jun <span class="month-tag">2026</span>`;
 
-    chip.innerHTML = `${day} Jun <span class="month-tag">2026</span>`;
+  chip.addEventListener('click', function () {
+    const val = this.getAttribute('data-value');
+    this.classList.toggle('active');
 
-    chip.addEventListener('click', () => {
-      const val = chip.dataset.value;
-      chip.classList.toggle('active');
+    if (this.classList.contains('active')) {
+      if (!chosenDatesCache.includes(val)) chosenDatesCache.push(val);
+    } else {
+      chosenDatesCache = chosenDatesCache.filter(i => i !== val);
+    }
 
-      if (chip.classList.contains('active')) {
-        if (!chosenDatesCache.includes(val)) chosenDatesCache.push(val);
-      } else {
-        chosenDatesCache = chosenDatesCache.filter(x => x !== val);
-      }
+    syncChips();
+  });
 
-      syncChipsToSelect();
-    });
-
-    chipsContainer.appendChild(chip);
-  }
+  chipsContainer.appendChild(chip);
 }
+
+function syncChips() {
+  hiddenSelect.innerHTML = '';
+  chosenDatesCache.forEach(d => {
+    const opt = document.createElement('option');
+    opt.value = d;
+    opt.selected = true;
+    hiddenSelect.appendChild(opt);
+  });
+}
+
 
 /* =========================
    SYNC FUNCTION
@@ -953,35 +962,27 @@ function syncChipsToSelect() {
    INPUT VALIDATION RULES
 ========================= */
 
-// NAME → uppercase + letters only
+// NAME → UPPERCASE ONLY
 nameInput.addEventListener('input', e => {
-  e.target.value = e.target.value
-    .toUpperCase()
-    .replace(/[^A-Z\s]/g, "");
+  e.target.value = e.target.value.toUpperCase();
 });
 
-// MYKAD → 12 digits only
-mykadInput.addEventListener('input', e => {
-  e.target.value = e.target.value
-    .replace(/\D/g, "")
-    .slice(0, 12);
-});
-
-// PHONE → digits only
-phoneInput.addEventListener('input', e => {
-  e.target.value = e.target.value.replace(/\D/g, "");
+// DIGIT ONLY
+[mykadInput, phoneInput].forEach(el => {
+  el.addEventListener('input', e => {
+    e.target.value = e.target.value.replace(/\D/g, '');
+  });
 });
 
 /* =========================
    STEP NAVIGATION
 ========================= */
-function jumpToStep(idx) {
-  steps.forEach((step, i) => {
-    step.classList.toggle('active', i === idx);
-    nodes[i].classList.toggle('active', i <= idx);
+function jumpToStep(i) {
+  steps.forEach((s, idx) => {
+    s.classList.toggle('active', idx === i);
+    nodes[idx].classList.toggle('active', idx <= i);
   });
-
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 /* =========================
@@ -989,51 +990,37 @@ function jumpToStep(idx) {
 ========================= */
 btnHeroAdvance.addEventListener('click', () => {
   if (!heroAgreementCheck.checked) {
-    alert("Please confirm agreement before proceeding.");
+    alert("Please acknowledge the requirement.");
     return;
   }
-
-  heroStage.style.display = "none";
-  applicationStage.style.display = "block";
+  heroStage.style.display = 'none';
+  applicationStage.style.display = 'block';
   jumpToStep(0);
 });
-
 /* =========================
    STEP BUTTONS
 ========================= */
-document.getElementById('btnToStep2').addEventListener('click', () => {
-  jumpToStep(1);
-});
+document.getElementById('btnToStep2').onclick = () => jumpToStep(1);
 
-document.getElementById('btnToStep3').addEventListener('click', () => {
-
+document.getElementById('btnToStep3').onclick = () => {
   if (
-    !nameInput.value.trim() ||
-    !mykadInput.value.trim() ||
-    !phoneInput.value.trim() ||
+    !nameInput.value ||
+    !mykadInput.value ||
+    !phoneInput.value ||
     chosenDatesCache.length === 0
   ) {
-    alert("Complete all fields before proceeding.");
+    alert("Complete all fields first.");
     return;
   }
 
-  const rawPhone = phoneInput.value.trim();
-  const cleanPhone =
-    rawPhone.startsWith('60') ? rawPhone.slice(2) :
-    rawPhone.startsWith('0') ? rawPhone.slice(1) :
-    rawPhone;
-
-  document.getElementById('sumName').textContent = nameInput.value.trim();
-  document.getElementById('sumMykad').textContent = mykadInput.value.trim();
-  document.getElementById('sumPhone').textContent = "+60 " + cleanPhone;
+  document.getElementById('sumName').textContent = nameInput.value;
+  document.getElementById('sumMykad').textContent = mykadInput.value;
+  document.getElementById('sumPhone').textContent = "601" + phoneInput.value.replace(/^0+/, '');
   document.getElementById('sumDates').textContent = chosenDatesCache.join(', ');
 
-  syncChipsToSelect();
   jumpToStep(2);
-});
+};
 
-document.getElementById('backToStep1').addEventListener('click', () => jumpToStep(0));
-document.getElementById('backToStep2').addEventListener('click', () => jumpToStep(1));
 
 /* =========================
    SUBMIT HANDLER
@@ -1046,54 +1033,44 @@ form.addEventListener('submit', async (e) => {
   submitBtn.textContent = "Submitting...";
 
   try {
-
-    const phoneRaw = phoneInput.value.trim();
-    const finalPhone =
-      phoneRaw.startsWith('60') ? phoneRaw :
-      phoneRaw.startsWith('0') ? "60" + phoneRaw.slice(1) :
-      "60" + phoneRaw;
+    let phone = phoneInput.value.replace(/^0+/, '');
+    phone = "601" + phone;
 
     const payload = {
-      name: nameInput.value.trim(),
-      mykad: mykadInput.value.trim(),
-      phone: finalPhone,
-      date_of_choice: chosenDatesCache.join(', ')
+      name: nameInput.value,
+      mykad: mykadInput.value,
+      phone: phone,
+      dates: chosenDatesCache.join(', ')
     };
 
-    await fetch(WEB_APP_URL, {
+    const res = await fetch(WEB_APP_URL, {
       method: "POST",
-      mode: "no-cors",
       headers: { "Content-Type": "text/plain" },
       body: JSON.stringify(payload)
     });
 
-    const refId = "KLIMS-2026-" + Math.floor(10000 + Math.random() * 90000);
+    const ref = "KLIMS-2026-" + Math.floor(10000 + Math.random() * 90000);
 
-    document.querySelector('.step-bar').style.display = "none";
-
-    document.querySelector('.form-content').innerHTML = `
+    // FIXED: correct container (no more crash)
+    applicationStage.innerHTML = `
       <div class="celebration-view">
-        <div class="celebration-banner-burst">✓</div>
-        <h2>Application Received</h2>
-        <p>KLIMS 2026 Crew Registration Successful.</p>
+        <h2>✓ Application Received</h2>
+        <p>KLIMS 2026 Crew submission successful.</p>
 
         <div class="reference-plate">
           <div class="plate-title">Reference ID</div>
-          <div class="plate-code">${refId}</div>
+          <div class="plate-code">${ref}</div>
         </div>
 
-        <p style="font-size:13px;color:#64748b;">
-          You will be contacted if shortlisted.
-        </p>
+        <p>System will contact shortlisted candidates.</p>
       </div>
     `;
 
   } catch (err) {
     console.error(err);
-    alert("Submission failed. Try again.");
-
+    alert("Submission failed. Check deployment or internet.");
     submitBtn.disabled = false;
-    submitBtn.textContent = "Submit";
+    submitBtn.textContent = "Transmit Manifest";
   }
 });
   </script>
